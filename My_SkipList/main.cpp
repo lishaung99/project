@@ -24,6 +24,7 @@ int main() {
     skipList.search_element(9);
     skipList.search_element(18);
 
+    skipList.modify_value(3, "一个实现的");
 
     skipList.display_list();
 
