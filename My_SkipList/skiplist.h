@@ -6,7 +6,7 @@
 #include <mutex>    // 引入互斥锁
 
 // 存储文件路径
-#define STORE_FILE "store/dumpFile"  
+#define STORE_FILE "./store/dumpFile"  
 
 std::mutex mtx; // 定义互斥锁 : 对插入节点成员函数和删除节点成员函数进行加锁
 std::string delimiter = ":";
@@ -99,6 +99,7 @@ public:
     bool search_element(K);             // 搜索节点
     int insert_element(K, V);           // 插入节点
     void delete_element(K);             // 删除节点
+    bool modify_value(K, V);            // 修改节点的值
     void display_list();                // 展示节点
     void dump_file();                   // 持久化数据到文件
     void load_file();                   // 从文件加载数据
@@ -309,20 +310,50 @@ void SkipList<K, V>::delete_element(K key){
     return;
 }
 
+// 修改节点的值
+template<typename K, typename V>
+bool SkipList<K, V>::modify_value(K key, V value) {
+    mtx.lock();  // 加锁
+    Node<K, V>* current = _header;
+
+    // 从最高层开始向下搜索待修改节点
+    for(int i = _skip_list_level; i >= 0; i--) {
+        // 寻找当前层中最接近且小于 key 的节点
+        while(current->forward[i] != nullptr && current->forward[i]->get_key() < key) {
+            current = current->forward[i];
+        }
+    }
+
+    current = current->forward[0];
+
+    // 确认找到了待修改的节点
+    if (current != nullptr && current->get_key() == key) {
+        current->set_value(value);
+        std::cout << "Successfully modified key " << key << " to new value " << value << std::endl;
+        mtx.unlock();  // 解锁
+        return true;
+    } else {
+        std::cout << "Key " << key << " not found, cannot modify value." << std::endl;
+        mtx.unlock();  // 解锁
+        return false;
+    }
+}
+
 template<typename K, typename V>
 void SkipList<K, V>::display_list(){
-    std::cout << "Successfully inserted key:" << key << ", value:" << value << std::endl;
+    std::cout << "\n*****Skip List*****"<<"\n";
     // 从最上层开始向下遍历所有层
-    for(int i = _skip_list_level; i >=0; i++){
-        Node<K,V> *node = this->_header->forward[i]; // 获取当前层的头节点
+    for(int i = _skip_list_level; i >=0; i--){
+        Node<K,V>* node = this->_header->forward[i]; // 获取当前层的头节点
         std::cout << "Level " << i << ": ";
         // 遍历当前层的所有节点
         while (node != nullptr){
-            std::cout<< node->get_key() << ":"<<node->gey_value()<<";"; // 当前节点k和v
+            std::cout<< node->get_key() << ":"<<node->get_value()<<";"; // 当前节点k和v
             node = node->forward[i]; //向下一个节点移动
         }
         std::cout<< std::endl;
     }
+    std::cout<< std::endl;
 }
 
 // 数据保存
@@ -330,7 +361,7 @@ template<typename K, typename V>
 void SkipList<K, V>::dump_file(){
     std::cout << "dump_file-----------------" << std::endl;
     // STORE_FILE 这个根据需要获取
-    _file_reader.open(STORE_FILE);// 打开文件
+    _file_writer.open(STORE_FILE);// 打开文件
     Node<K, V> *node = this->_header->forward[0];// 从头节点开始遍历
     
     while (node != nullptr) {
@@ -394,43 +425,3 @@ template<typename K, typename V>
 int SkipList<K, V>::size() { 
     return _element_count;
 }
-
-// int main() {
-//     // 创建一个最大层级为 6 的跳表
-//     SkipList<int, int> skipList(6);
-
-//     // 插入一些元素
-//     skipList.insert_element(1, 100);
-//     skipList.insert_element(2, 20);
-//     skipList.insert_element(3, 30);
-//     skipList.insert_element(4, 40);
-//     skipList.insert_element(5, 50);
-
-//     // 显示跳表内容
-//     std::cout << "Skip List after insertion:" << std::endl;
-//     skipList.display_list();
-
-//     // 搜索元素
-//     int key_to_search = 3;
-//     if (skipList.search_element(key_to_search)) {
-//         std::cout << "Element with key " << key_to_search << " found." << std::endl;
-//     } else {
-//         std::cout << "Element with key " << key_to_search << " not found." << std::endl;
-//     }
-
-//     // 删除元素
-//     int key_to_delete = 4;
-//     skipList.delete_element(key_to_delete);
-//     std::cout << "Skip List after deletion of key " << key_to_delete << ":" << std::endl;
-//     skipList.display_list();
-
-//     // 持久化数据到文件
-//     skipList.dump_file();
-
-//     // 从文件加载数据
-//     skipList.load_file();
-//     std::cout << "Skip List after loading from file:" << std::endl;
-//     skipList.display_list();
-
-//     return 0;
-// }

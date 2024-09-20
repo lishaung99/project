@@ -1,3 +1,11 @@
+/*
+ * @Description: 
+ * @Author: lishuang
+ * @Date: 2024-09-10 18:24:47
+ * @FilePath: \c++projectd:\LearningPro\project\My_SkipList\main.cpp
+ * @LastEditTime: 2024-09-11 11:17:17
+ * @LastEditors: lishuang
+ */
 #include <iostream>
 #include "skiplist.h"
 #define FILE_PATH "./store/dumpFile"
@@ -24,6 +32,7 @@ int main() {
     skipList.search_element(9);
     skipList.search_element(18);
 
+    skipList.modify_value(3, "一个实现的");
 
     skipList.display_list();
 
