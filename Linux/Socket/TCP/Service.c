@@ -1,12 +1,13 @@
+/*
+ * @Description: 
+ * @Author: lishuang
+ * @Date: 2024-11-08 17:46:00
+ * @FilePath: \undefinedd:\LearningPro\project\Linux\Socket\TCP\Service.c
+ * @LastEditTime: 2024-11-08 17:53:34
+ * @LastEditors: lishuang
+ */
 // socket TCP连接 服务器端
-#include<stdio.h>
-#include<stdlib.h>
-#include<sys/socket.h>
-#include<string.h>
-#include <unistd.h>
-#include <arpa/inet.h>
-#define PORT 10000
-#define BUFFER_SIZE 1024
+#include "config.h"
 void start_service(){
 	
 	int socket_service, socket_client;

@@ -2,22 +2,12 @@
  * @Description: 
  * @Author: lishuang
  * @Date: 2024-11-08 17:42:23
- * @FilePath: \undefinedd:\LearningPro\git\Linux\Socket\TCP\Client.c
- * @LastEditTime: 2024-11-08 17:43:11
+ * @FilePath: \undefinedd:\LearningPro\project\Linux\Socket\TCP\Client.c
+ * @LastEditTime: 2024-11-08 17:53:13
  * @LastEditors: lishuang
  */
 // my_client.c  TCP client
-#include <stdio.h>          // 包含标准输入输出库
-#include <stdlib.h>         // 包含标准库函数，如 exit
-#include <string.h>         // 包含字符串处理函数，如 memset 和 strcpy
-#include <unistd.h>         // 包含 Unix 标准函数，如 close
-#include <arpa/inet.h>      // 包含网络地址转换函数，如 inet_pton
-#include <sys/socket.h>     // 包含套接字相关函数
-
-#define PORT 10000          // 定义服务器端口号
-#define IP "127.0.0.1"      // 定义服务器 IP 地址
-#define BUFFER_SIZE 1024    // 定义缓冲区大小
-
+#include "config.h"
 void start_client() {
     int clientsock;
     struct sockaddr_in serveraddr;
