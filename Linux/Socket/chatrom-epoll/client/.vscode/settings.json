@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "config.h": "c",
+        "pthread.h": "c",
+        "system_error": "c",
+        "public_function.h": "c",
+        "sys_config.h": "c",
+        "include.h": "c",
+        "enum.h": "c"
+    }
+}
